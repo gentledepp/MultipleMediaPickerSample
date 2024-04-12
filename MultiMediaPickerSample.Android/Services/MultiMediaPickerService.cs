@@ -240,8 +240,17 @@ namespace MultiMediaPickerSample.Droid.Services
         {
            
             mediaPickedTcs = new TaskCompletionSource<IList<MediaFile>>();
-           
-            var imageIntent = new Intent(Intent.ActionPick);
+
+
+            var intentString = Intent.ActionPick;
+            // https://learn.microsoft.com/en-us/xamarin/android/app-fundamentals/android-api-levels?tabs=windows
+            // https://developer.android.com/reference/android/provider/MediaStore
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Tiramisu)
+            {
+                intentString = "android.provider.action.PICK_IMAGES";
+            }
+
+            var imageIntent = new Intent(intentString);
             imageIntent.SetType(type);
             imageIntent.PutExtra(Intent.ExtraAllowMultiple, true);
             CrossCurrentActivity.Current.Activity.StartActivityForResult(Intent.CreateChooser(imageIntent, title), resultCode);
