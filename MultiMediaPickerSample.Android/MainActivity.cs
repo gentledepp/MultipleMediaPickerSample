@@ -1,19 +1,10 @@
-﻿using System;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Android.OS;
-using Android.Database;
-using Android.Provider;
-using Plugin.CurrentActivity;
 using Android.Content;
 using Plugin.Permissions;
 using MultiMediaPickerSample.Droid.Services;
-using DLToolkit.Forms.Controls;
-using FFImageLoading.Forms.Droid;
 
 namespace MultiMediaPickerSample.Droid
 {
