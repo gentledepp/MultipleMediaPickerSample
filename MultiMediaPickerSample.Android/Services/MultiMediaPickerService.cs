@@ -242,17 +242,23 @@ namespace MultiMediaPickerSample.Droid.Services
             mediaPickedTcs = new TaskCompletionSource<IList<MediaFile>>();
 
 
-            var intentString = Intent.ActionPick;
-            // https://learn.microsoft.com/en-us/xamarin/android/app-fundamentals/android-api-levels?tabs=windows
-            // https://developer.android.com/reference/android/provider/MediaStore
-            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Tiramisu)
-            {
-                intentString = "android.provider.action.PICK_IMAGES";
-            }
-
-            var imageIntent = new Intent(intentString);
+            Intent imageIntent = new Intent(Intent.ActionPick);
             imageIntent.SetType(type);
             imageIntent.PutExtra(Intent.ExtraAllowMultiple, true);
+
+            // https://learn.microsoft.com/en-us/xamarin/android/app-fundamentals/android-api-levels?tabs=windows
+            // https://developer.android.com/reference/android/provider/MediaStore
+            // change image access in android Android 13 (API level 33) or higher:
+            // https://developer.android.com/about/versions/14/changes/partial-photo-video-access
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Tiramisu)
+            {
+                imageIntent = new Intent("android.provider.action.PICK_IMAGES");
+                imageIntent.SetType(type);
+                // specify https://developer.android.com/reference/android/provider/MediaStore#EXTRA_PICK_IMAGES_MAX
+                // to allow multiple images in result (max 100)
+                imageIntent.PutExtra("android.provider.extra.PICK_IMAGES_MAX", 100); 
+            }
+
             CrossCurrentActivity.Current.Activity.StartActivityForResult(Intent.CreateChooser(imageIntent, title), resultCode);
 
             return await mediaPickedTcs.Task;

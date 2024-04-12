@@ -60,6 +60,7 @@ namespace MultiMediaPickerSample.ViewModels
 
         async Task<bool> CheckPermissionsAsync()
         {
+            return true;
             var retVal = false;
             try
             {
